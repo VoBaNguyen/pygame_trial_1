@@ -13,9 +13,6 @@ class Layout:
 
         # Layout setup
         self.boundary_tiles = self.create_boundary_tiles()
-        self.player = pygame.sprite.GroupSingle()
-        player_sprite = Player(tile_size, 3*tile_size, 3*tile_size)
-        self.player.add(player_sprite)
 
     def create_boundary_tiles(self):
         boundary_tiles = pygame.sprite.Group()
@@ -35,8 +32,7 @@ class Layout:
 
         return boundary_tiles
 
-    def horizontal_movement_collision(self):
-        player = self.player.sprite
+    def horizontal_movement_collision(self, player):
         player.rect.x += player.direction.x * player.speed
 
         for sprite in self.boundary_tiles:
@@ -48,8 +44,7 @@ class Layout:
                     player.rect.right = sprite.rect.left
                     self.current_x = player.rect.right
 
-    def vertical_movement_collision(self):
-        player = self.player.sprite
+    def vertical_movement_collision(self, player):
         player.rect.y += player.direction.y * player.speed
 
         for sprite in self.boundary_tiles:
@@ -66,11 +61,12 @@ class Layout:
         player_x = player.rect.centerx
         direction_x = player.direction.x
 
-    def run(self):
+    def run(self, players):
         self.boundary_tiles.draw(self.display_surface)
 
         # Update player position before draw
-        self.horizontal_movement_collision()
-        self.vertical_movement_collision()
-        self.player.update()
-        self.player.draw(self.display_surface)
+        for player in players:
+            self.horizontal_movement_collision(player.sprite)
+            self.vertical_movement_collision(player.sprite)
+            player.update()
+            player.draw(self.display_surface)
