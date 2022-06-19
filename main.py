@@ -18,7 +18,6 @@ layout = Layout(screen)
 
 
 def main(genomes, config):
-    print(genomes)
     # Setup Neat
     global GEN
     GEN += 1
@@ -44,14 +43,14 @@ def main(genomes, config):
 
         for x, player in enumerate(players):
             ge[x].fitness += 0.1
-            print("== == == == == == == == == == =")
-            print(nets[x].input_nodes)
-            print(nets[x].node_evals)
-            # print(player.sprite.rect.y)
-            # output = nets[x].activate((player.sprite.rect.y, abs(
-            #     bird.y - pipes[pipe_indx].height), abs(bird.y - pipes[pipe_indx].bottom)))
-            # if output[0] > 0.5:
-            player.sprite.move("right")
+
+            output = nets[x].activate([abs(player.sprite.rect.x - screen_width/2)])
+            # output = nets[x].activate((0,0))
+            if output[0] < 0.5:
+                player.sprite.move("right")
+
+            print(f"Fitness: {ge[x].fitness}")
+
 
         screen.fill('black')
         layout.run(players)
