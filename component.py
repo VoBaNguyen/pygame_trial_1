@@ -16,10 +16,11 @@ class Player(Tile):
     def __init__(self, size, x, y):
         super().__init__(size, x, y)
         self.image.fill("red")
+        self.collide = False
 
         # Player movement
         self.direction = pygame.math.Vector2(0, 0)
-        self.speed = 1
+        self.speed = 5
 
     def get_input(self):
         keys = pygame.key.get_pressed()
@@ -48,18 +49,14 @@ class Player(Tile):
         # Player movement
         if direction == "right":
             self.direction.x = 1
-            self.direction.y = 0
 
         elif direction == "left":
             self.direction.x = -1
-            self.direction.y = 0
 
         elif direction == "up":
-            self.direction.x = 0
             self.direction.y = -1
 
         elif direction == "down":
-            self.direction.x = 0
             self.direction.y = 1
 
         else:

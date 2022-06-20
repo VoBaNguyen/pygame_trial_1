@@ -40,9 +40,11 @@ class Layout:
                 if player.direction.x < 0:
                     player.rect.left = sprite.rect.right
                     self.current_x = player.rect.left
+                    player.collide = True
                 elif player.direction.x > 0:
                     player.rect.right = sprite.rect.left
                     self.current_x = player.rect.right
+                    player.collide = True
 
     def vertical_movement_collision(self, player):
         player.rect.y += player.direction.y * player.speed
@@ -52,9 +54,11 @@ class Layout:
                 if player.direction.y > 0:
                     player.direction.y = 0
                     player.rect.bottom = sprite.rect.top
+                    player.collide = True
                 elif player.direction.y < 0:
                     player.rect.top = sprite.rect.bottom
                     player.direction.y = 0
+                    player.collide = True
 
     def create_player(self):
         player = self.player.sprite

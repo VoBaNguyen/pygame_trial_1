@@ -24,6 +24,7 @@ def main(genomes, config):
     nets = []
     ge = []
     players = []
+    run = True
 
     for _, g in genomes:
         net = neat.nn.FeedForwardNetwork.create(g, config)
@@ -35,22 +36,35 @@ def main(genomes, config):
         player.add(Player(tile_size, 3*tile_size, 3*tile_size))
         players.append(player)
 
-    while True:
+    while run:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
 
+        if len(players) == 0:
+            run = False
+
         for x, player in enumerate(players):
             ge[x].fitness += 0.1
 
-            output = nets[x].activate([abs(player.sprite.rect.x - screen_width/2)])
-            # output = nets[x].activate((0,0))
-            if output[0] < 0.5:
+            a1, a2 = nets[x].activate(
+                [abs(player.sprite.rect.x - screen_width/2), abs(player.sprite.rect.x - screen_height/2)])
+            # a1, a2 = nets[x].activate((0, 0))
+            # print(a1, a2)
+            if a1 > 0:
                 player.sprite.move("right")
+            else:
+                player.sprite.move("left")
 
-            print(f"Fitness: {ge[x].fitness}")
+            if a2 > 0:
+                player.sprite.move("down")
+            else:
+                player.sprite.move("up")
 
+        for x, player in enumerate(players):
+            if player.sprite.collide:
+                players.pop(x)
 
         screen.fill('black')
         layout.run(players)
